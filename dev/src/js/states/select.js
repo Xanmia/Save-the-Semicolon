@@ -39,7 +39,9 @@ $.select = function (_l) {
     var Next = document.createElement('div');
     Next.innerText = ">";
     Next.classList.add('links', 'rightArrow');
-    Next.addEventListener('click', function () { if (levelNum < $.level.length - 1 && $.gameProgress.data.scores.length > levelNum) { levelNum++; $.state.buildLevel(levelNum); }; changeLevel(); });
+    Next.addEventListener('click', function () { 
+        if (levelNum < $.level.length - 1 && $.gameProgress.data.scores.length > levelNum) { levelNum++; $.state.buildLevel(levelNum); }; changeLevel(); 
+    });
     customContainer.appendChild(Next);
 
     var Play = document.createElement('div');
@@ -94,8 +96,22 @@ $.select = function (_l) {
 
         levelName.innerHTML = "Level " + levelNum + " Leaderboard";
         ghostPath = [];
+        $.database.ref('ghosts/'+levelNum).once('value').then(function(snapshot) {
+            ghostPath = snapshot.val();
+        });
 
+        Scores.innerHTML = "Loading...";
 
+        $.database.ref('scores/'+levelNum).once('value').then(function(snapshot) {
+            var currScores = snapshot.val();
+            //ghostPath = [];//data.g;
+            if (scoreBoardType == "online") {
+                lB.innerHTML = "Local / <b>Online</b>";
+                buildScoreBoard(currScores || []);
+            }
+           // datacont.innerHTML = scores[0].name + " - " + scores[0].score;
+        });
+/*
         $.socket.emit("score list", levelNum, function (data) {
             ghostPath = data.g;
             if (scoreBoardType == "online") {
@@ -104,7 +120,7 @@ $.select = function (_l) {
             }
         }
         );
-
+*/
         if (scoreBoardType != "online") {
             lB.innerHTML = "<b>Local</b> / Online";
             buildScoreBoard($.gameProgress.data.scores[levelNum] || []);

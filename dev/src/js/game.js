@@ -26,7 +26,19 @@ $.state;
 $.W = Math.min(window.innerWidth,900);
 $.H = Math.min(window.innerHeight,700);
 
-$.socket = io({ upgrade: false, transports: ["websocket"] });
+// $.socket = io.connect("https://savethesemicolon.herokuapp.com");
+//$.socket = io({ upgrade: false, transports: ["websocket"] });
+
+ $.FBconfig = {
+    apiKey: "AIzaSyAL65RDYyDFEnze_PEy9ES9oUFK_-OAiBw",
+    authDomain: "savethesemicolon-14735.firebaseapp.com",
+    databaseURL: "https://savethesemicolon-14735.firebaseio.com",
+    storageBucket: "savethesemicolon-14735.appspot.com",
+    messagingSenderId: "740918781240"
+  };
+firebase.initializeApp($.FBconfig);
+
+$.database = firebase.database();
 
 $.setup = function () {
     $.main = document.getElementById('main');
@@ -71,7 +83,6 @@ $.setup = function () {
     window.addEventListener('touchstart', $.touchstart);
     window.addEventListener('touchmove', $.touchmove);
     window.addEventListener('touchend', $.touchend);
-
 
     document.getElementById("username").value = $.gameProgress.data.user == "default user" ? "" : $.gameProgress.data.user;
     $.state = new $.play();
@@ -162,6 +173,7 @@ $.render = function () {
     $.state.render();
 
 }
+
 
 window.addEventListener('load', function () {
     $.setup();

@@ -115,7 +115,8 @@ $.play = function (l) {
 
         this.path.splice(0, 1);
         $.gameProgress.saveScore(currentLevel, $.elapsed.toFixed(2));
-        $.socket.emit("new score", { n: $.gameProgress.data.user||"no name mcgee", l: currentLevel, s: $.elapsed.toFixed(2) }, this.path);
+        $.onlineNewScore(currentLevel, { n: $.gameProgress.data.user||"no name mcgee", s: $.elapsed.toFixed(2) }, this.path);
+       // $.socket.emit("new score", { n: $.gameProgress.data.user||"no name mcgee", l: currentLevel, s: $.elapsed.toFixed(2) }, this.path);
         //   this.path = [];
 
         currentLevel += 1;
